@@ -29,6 +29,7 @@ const (
 
 const (
 	MovePlayedEventType      = "move-played"
+	MovePlayedEventBoard     = "board"
 	MovePlayedEventCreator   = "creator"
 	MovePlayedEventGameIndex = "game-index"
 	MovePlayedEventCapturedX = "captured-x"
