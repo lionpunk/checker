@@ -6,14 +6,40 @@ export const protobufPackage = "alice.checkers.checkers";
 
 export interface SystemInfo {
   nextId: number;
+  /** Will contain the index of the game at the head. */
+  fifoHeadIndex: string;
+  /** Will contain the index of the game at the tail. */
+  fifoTailIndex: string;
+  /** Pertains to the FIFO. Toward head. */
+  beforeIndex: string;
+  /** Pertains to the FIFO. Toward tail. */
+  afterIndex: string;
 }
 
-const baseSystemInfo: object = { nextId: 0 };
+const baseSystemInfo: object = {
+  nextId: 0,
+  fifoHeadIndex: "",
+  fifoTailIndex: "",
+  beforeIndex: "",
+  afterIndex: "",
+};
 
 export const SystemInfo = {
   encode(message: SystemInfo, writer: Writer = Writer.create()): Writer {
     if (message.nextId !== 0) {
       writer.uint32(8).uint64(message.nextId);
+    }
+    if (message.fifoHeadIndex !== "") {
+      writer.uint32(18).string(message.fifoHeadIndex);
+    }
+    if (message.fifoTailIndex !== "") {
+      writer.uint32(26).string(message.fifoTailIndex);
+    }
+    if (message.beforeIndex !== "") {
+      writer.uint32(58).string(message.beforeIndex);
+    }
+    if (message.afterIndex !== "") {
+      writer.uint32(66).string(message.afterIndex);
     }
     return writer;
   },
@@ -27,6 +53,18 @@ export const SystemInfo = {
       switch (tag >>> 3) {
         case 1:
           message.nextId = longToNumber(reader.uint64() as Long);
+          break;
+        case 2:
+          message.fifoHeadIndex = reader.string();
+          break;
+        case 3:
+          message.fifoTailIndex = reader.string();
+          break;
+        case 7:
+          message.beforeIndex = reader.string();
+          break;
+        case 8:
+          message.afterIndex = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -43,12 +81,39 @@ export const SystemInfo = {
     } else {
       message.nextId = 0;
     }
+    if (object.fifoHeadIndex !== undefined && object.fifoHeadIndex !== null) {
+      message.fifoHeadIndex = String(object.fifoHeadIndex);
+    } else {
+      message.fifoHeadIndex = "";
+    }
+    if (object.fifoTailIndex !== undefined && object.fifoTailIndex !== null) {
+      message.fifoTailIndex = String(object.fifoTailIndex);
+    } else {
+      message.fifoTailIndex = "";
+    }
+    if (object.beforeIndex !== undefined && object.beforeIndex !== null) {
+      message.beforeIndex = String(object.beforeIndex);
+    } else {
+      message.beforeIndex = "";
+    }
+    if (object.afterIndex !== undefined && object.afterIndex !== null) {
+      message.afterIndex = String(object.afterIndex);
+    } else {
+      message.afterIndex = "";
+    }
     return message;
   },
 
   toJSON(message: SystemInfo): unknown {
     const obj: any = {};
     message.nextId !== undefined && (obj.nextId = message.nextId);
+    message.fifoHeadIndex !== undefined &&
+      (obj.fifoHeadIndex = message.fifoHeadIndex);
+    message.fifoTailIndex !== undefined &&
+      (obj.fifoTailIndex = message.fifoTailIndex);
+    message.beforeIndex !== undefined &&
+      (obj.beforeIndex = message.beforeIndex);
+    message.afterIndex !== undefined && (obj.afterIndex = message.afterIndex);
     return obj;
   },
 
@@ -58,6 +123,26 @@ export const SystemInfo = {
       message.nextId = object.nextId;
     } else {
       message.nextId = 0;
+    }
+    if (object.fifoHeadIndex !== undefined && object.fifoHeadIndex !== null) {
+      message.fifoHeadIndex = object.fifoHeadIndex;
+    } else {
+      message.fifoHeadIndex = "";
+    }
+    if (object.fifoTailIndex !== undefined && object.fifoTailIndex !== null) {
+      message.fifoTailIndex = object.fifoTailIndex;
+    } else {
+      message.fifoTailIndex = "";
+    }
+    if (object.beforeIndex !== undefined && object.beforeIndex !== null) {
+      message.beforeIndex = object.beforeIndex;
+    } else {
+      message.beforeIndex = "";
+    }
+    if (object.afterIndex !== undefined && object.afterIndex !== null) {
+      message.afterIndex = object.afterIndex;
+    } else {
+      message.afterIndex = "";
     }
     return message;
   },
