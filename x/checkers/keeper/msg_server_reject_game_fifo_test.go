@@ -8,6 +8,40 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestRejectSecondGameHasSavedFifo(t *testing.T) {
+	msgServer, keeper, context := setupMsgServerWithOneGameForRejectGame(t)
+	ctx := sdk.UnwrapSDKContext(context)
+	msgServer.CreateGame(context, &types.MsgCreateGame{
+		Creator: bob,
+		Black:   carol,
+		Red:     alice,
+	})
+	msgServer.RejectGame(context, &types.MsgRejectGame{
+		Creator:   carol,
+		GameIndex: "1",
+	})
+	systemInfo, found := keeper.GetSystemInfo(ctx)
+	require.True(t, found)
+	require.EqualValues(t, types.SystemInfo{
+		NextId:        3,
+		FifoHeadIndex: "2",
+		FifoTailIndex: "2",
+	}, systemInfo)
+	game2, found := keeper.GetStoredGame(ctx, "2")
+	require.True(t, found)
+	require.EqualValues(t, types.StoredGame{
+		Index:       "2",
+		Board:       "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+		Turn:        "b",
+		Black:       carol,
+		Red:         alice,
+		MoveCount:   uint64(0),
+		BeforeIndex: "-1",
+		AfterIndex:  "-1",
+		Deadline:    types.FormatDeadline(ctx.BlockTime().Add(types.MaxTurnDuration)),
+	}, game2)
+}
+
 func TestRejectMiddleGameHasSavedFifo(t *testing.T) {
 	msgServer, keeper, context := setupMsgServerWithOneGameForRejectGame(t)
 	ctx := sdk.UnwrapSDKContext(context)
@@ -43,6 +77,7 @@ func TestRejectMiddleGameHasSavedFifo(t *testing.T) {
 		MoveCount:   uint64(0),
 		BeforeIndex: "-1",
 		AfterIndex:  "3",
+		Deadline:    types.FormatDeadline(ctx.BlockTime().Add(types.MaxTurnDuration)),
 	}, game1)
 	game3, found := keeper.GetStoredGame(ctx, "3")
 	require.True(t, found)
@@ -55,5 +90,6 @@ func TestRejectMiddleGameHasSavedFifo(t *testing.T) {
 		MoveCount:   uint64(0),
 		BeforeIndex: "1",
 		AfterIndex:  "-1",
+		Deadline:    types.FormatDeadline(ctx.BlockTime().Add(types.MaxTurnDuration)),
 	}, game3)
 }
