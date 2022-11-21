@@ -64,6 +64,12 @@ const (
 	GameCreatedEventWager = "wager"
 )
 
+const (
+	CreateGameGas       = 15000
+	PlayMoveGas         = 1000
+	RejectGameRefundGas = 14000
+)
+
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
