@@ -32,22 +32,6 @@ func (storedGame StoredGame) ParseGame() (game *rules.Game, err error) {
 	return board, nil
 }
 
-func (storedGame StoredGame) Validate() (err error) {
-	_, err = storedGame.GetBlackAddress()
-	if err != nil {
-		return err
-	}
-	_, err = storedGame.GetRedAddress()
-	if err != nil {
-		return err
-	}
-	_, err = storedGame.ParseGame()
-	if err != nil {
-		return err
-	}
-	_, err = storedGame.GetDeadlineAsTime()
-	return err
-}
 func (storedGame StoredGame) GetDeadlineAsTime() (deadline time.Time, err error) {
 	deadline, errDeadline := time.Parse(DeadlineLayout, storedGame.Deadline)
 	return deadline, sdkerrors.Wrapf(errDeadline, ErrInvalidDeadline.Error(), storedGame.Deadline)
@@ -82,5 +66,22 @@ func (storedGame StoredGame) GetWinnerAddress() (address sdk.AccAddress, found b
 }
 
 func (storedGame *StoredGame) GetWagerCoin() (wager sdk.Coin) {
-	return sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(int64(storedGame.Wager)))
+	return sdk.NewCoin(storedGame.Denom, sdk.NewInt(int64(storedGame.Wager)))
+}
+
+func (storedGame StoredGame) Validate() (err error) {
+	_, err = storedGame.GetBlackAddress()
+	if err != nil {
+		return err
+	}
+	_, err = storedGame.GetRedAddress()
+	if err != nil {
+		return err
+	}
+	_, err = storedGame.ParseGame()
+	if err != nil {
+		return err
+	}
+	_, err = storedGame.GetDeadlineAsTime()
+	return err
 }

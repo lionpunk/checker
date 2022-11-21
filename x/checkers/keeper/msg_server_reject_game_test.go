@@ -27,6 +27,7 @@ func setupMsgServerWithOneGameForRejectGame(t testing.TB) (types.MsgServer, keep
 		Black:   bob,
 		Red:     carol,
 		Wager:   45,
+		Denom:   "stake",
 	})
 	return server, *k, context, ctrl, bankMock
 }
@@ -105,6 +106,7 @@ func TestRejectGameByBlackRefundedGas(t *testing.T) {
 	after := ctx.GasMeter().GasConsumed()
 	require.LessOrEqual(t, after, before-5_000)
 }
+
 func TestRejectGameByRedNoMove(t *testing.T) {
 	msgServer, _, context, ctrl, _ := setupMsgServerWithOneGameForRejectGame(t)
 	defer ctrl.Finish()

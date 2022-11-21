@@ -23,14 +23,6 @@ func (k Keeper) CanPlayMove(goCtx context.Context, req *types.QueryCanPlayMoveRe
 	if !found {
 		return nil, sdkerrors.Wrapf(types.ErrGameNotFound, "%s", req.GameIndex)
 	}
-
-	// TODO: Process the query
-	if storedGame.Winner != rules.PieceStrings[rules.NO_PLAYER] {
-		return &types.QueryCanPlayMoveResponse{
-			Possible: false,
-			Reason:   types.ErrGameFinished.Error(),
-		}, nil
-	}
 	if storedGame.Winner != rules.PieceStrings[rules.NO_PLAYER] {
 		return &types.QueryCanPlayMoveResponse{
 			Possible: false,
@@ -83,6 +75,4 @@ func (k Keeper) CanPlayMove(goCtx context.Context, req *types.QueryCanPlayMoveRe
 		Possible: true,
 		Reason:   "ok",
 	}, nil
-
-	return &types.QueryCanPlayMoveResponse{}, nil
 }

@@ -19,26 +19,32 @@ const (
 	MemStoreKey = "mem_checkers"
 )
 
+func KeyPrefix(p string) []byte {
+	return []byte(p)
+}
+
+const (
+	SystemInfoKey = "SystemInfo-value-"
+)
+
 const (
 	GameCreatedEventType      = "new-game-created" // Indicates what event type to listen to
 	GameCreatedEventCreator   = "creator"          // Subsidiary information
 	GameCreatedEventGameIndex = "game-index"       // What game is relevant
 	GameCreatedEventBlack     = "black"            // Is it relevant to me?
 	GameCreatedEventRed       = "red"              // Is it relevant to me?
+	GameCreatedEventWager     = "wager"
+	GameCreatedEventDenom     = "denom"
 )
 
 const (
 	MovePlayedEventType      = "move-played"
-	MovePlayedEventBoard     = "board"
 	MovePlayedEventCreator   = "creator"
 	MovePlayedEventGameIndex = "game-index"
 	MovePlayedEventCapturedX = "captured-x"
 	MovePlayedEventCapturedY = "captured-y"
 	MovePlayedEventWinner    = "winner"
-)
-
-const (
-	NoFifoIndex = "-1"
+	MovePlayedEventBoard     = "board"
 )
 
 const (
@@ -48,8 +54,11 @@ const (
 )
 
 const (
-	// MaxTurnDuration = time.Duration(24 * 3_600 * 1000_000_000) // 1 day
-	MaxTurnDuration = time.Duration(5 * 60 * 1000_000_000)
+	NoFifoIndex = "-1"
+)
+
+const (
+	MaxTurnDuration = time.Duration(24 * 3_600 * 1000_000_000) // 1 day
 	DeadlineLayout  = "2006-01-02 15:04:05.999999999 +0000 UTC"
 )
 
@@ -61,19 +70,7 @@ const (
 )
 
 const (
-	GameCreatedEventWager = "wager"
-)
-
-const (
 	CreateGameGas       = 15000
 	PlayMoveGas         = 1000
 	RejectGameRefundGas = 14000
-)
-
-func KeyPrefix(p string) []byte {
-	return []byte(p)
-}
-
-const (
-	SystemInfoKey = "SystemInfo-value-"
 )
