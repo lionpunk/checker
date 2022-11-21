@@ -60,6 +60,10 @@ const (
 	GameForfeitedEventBoard     = "board"
 )
 
+const (
+	GameCreatedEventWager = "wager"
+)
+
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
